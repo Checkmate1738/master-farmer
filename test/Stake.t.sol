@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { Stake,Token,IERC20 } from "@src/Stake.sol";
+import { Stake,ERC20,IERC20 } from "@src/Stake.sol";
 import {Test,console} from "forge-std/Test.sol";
 
 contract VaultTest is Test {
@@ -35,5 +35,18 @@ contract VaultTest is Test {
         stake.Register("njomo",user,13);
 
         vm.stopPrank();
+    }
+}
+
+contract Token is ERC20 {
+    constructor(string memory name,string memory symbol) ERC20(name,symbol) {}
+
+    function deposit() payable public {
+        _mint(msg.sender, msg.value);
+    }
+
+    function withdraw(uint256 _amount) public {
+        _burn(msg.sender, _amount);
+        payable(msg.sender).call{value:_amount}("");
     }
 }

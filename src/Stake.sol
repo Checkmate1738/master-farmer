@@ -51,16 +51,3 @@ contract Stake is IStake,ERC20,ERC4626 {
     }
 
 }
-
-contract Token is ERC20 {
-    constructor(string memory name,string memory symbol) ERC20(name,symbol) {}
-
-    function deposit() payable public {
-        _mint(msg.sender, msg.value);
-    }
-
-    function withdraw(uint256 _amount) public {
-        _burn(msg.sender, _amount);
-        payable(msg.sender).call{value:_amount}("");
-    }
-}
